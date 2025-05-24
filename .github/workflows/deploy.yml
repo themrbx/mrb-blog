@@ -1,0 +1,28 @@
+name: Deploy Hugo blog to GitHub Pages
+
+on:
+  push:
+    branches: [main]  # ou 'master'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+      
+      - name: Instalar Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+
+      - name: Build do site
+        run: hugo --minify
+          
+      - name: Deploy no GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          cname: www.matheusmrb.com.br  # ou remova se não for usar domínio customizado
